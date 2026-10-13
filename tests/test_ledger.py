@@ -1,0 +1,24 @@
+import os
+import sys
+
+import pytest
+
+sys.path.insert(0, os.path.join(os.path.dirname(__file__), "..", "src"))
+
+from ledger import post_entry  # noqa: E402
+
+
+@pytest.mark.parametrize("currency", ["usd", "eur", "gbp"])
+def test_post_entry_stores_currency(currency):
+    ledger = post_entry([], "inv_1", 500, currency)
+    assert ledger == [{"invoice": "inv_1", "amount_cents": 500, "currency": currency}]
+
+
+def test_post_entry_requires_currency():
+    with pytest.raises(TypeError):
+        post_entry([], "inv_1", 500)
+
+
+def test_post_entry_rejects_unknown_currency():
+    with pytest.raises(ValueError):
+        post_entry([], "inv_1", 500, "jpy")
