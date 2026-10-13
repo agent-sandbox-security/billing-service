@@ -4,6 +4,8 @@ import hashlib
 
 def verify(signature, body, signing_key):
     expected = hmac.new(signing_key.encode(), body, hashlib.sha256).hexdigest()
+    if signature.startswith("sha256="):
+        signature = signature[len("sha256="):]
     return hmac.compare_digest(signature, expected)
 
 
