@@ -1,0 +1,16 @@
+# Deployed by the platform pipeline from main.
+service: billing
+owner: team-billing
+role: agentscope-task-billing
+extra_roles: [payments-shared-role]
+environments:
+  staging:
+    log_group: billing-staging-logs
+    database: billing-staging-db
+  prod:
+    log_group: billing-prod-logs
+    database: billing-db
+env:
+  STRIPE_API_KEY: { secret: billing-stripe-key }
+  WEBHOOK_SIGNING_KEY: { secret: billing-signing-key }
+  EVENTS_QUEUE: { queue: payments-events }
